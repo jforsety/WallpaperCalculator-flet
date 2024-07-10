@@ -1,4 +1,4 @@
 flet==0.22.*
 pillow==10.4.*
-numberfield-flet==1.0.0
+
 

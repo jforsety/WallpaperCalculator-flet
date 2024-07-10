@@ -1,16 +1,18 @@
 import time
 from flet import app, Page
 from flet_core import AppBar, Text, IconButton, ButtonStyle, colors, Column, ProgressBar, View, ScrollMode, \
-    ElevatedButton, SnackBar
-from numberfield_flet import NumberField
+    ElevatedButton, SnackBar, TextField
 
 
 def main(page: Page):
+    # Название окна приложения
+    page.title = "Wallpaper Calculator"
+
     def result_button_clicked(e):
         # Проверка обязательных полей
-        if (room_width.value == 0.0 or room_width.value == '' or room_length.value == 0.0 or room_length.value == '' or
-                room_height.value == 0.0 or room_height.value == '' or roll_width.value == 0.0 or roll_width.value == '' or
-                roll_length.value == 0.0 or roll_length.value == ''):
+        if (room_width.value == "0" or room_width.value == '' or room_length.value == "0" or room_length.value == '' or
+                room_height.value == "0" or room_height.value == '' or roll_width.value == "0" or roll_width.value == '' or
+                roll_length.value == "0" or roll_length.value == ''):
             show_snack_bar("Заполните все обязательные поля! (Помечены *)")
             page.update()
             return
@@ -20,32 +22,28 @@ def main(page: Page):
             room_h = float(room_height.value)
             roll_w = float(roll_width.value) * 0.01
             roll_l = float(roll_length.value)
+
         # Проверка не обязательных полей на отсутствие ввода значения.
         if door_width.value == '':
             door_w = 0
         else:
             door_w = float(door_width.value)
-
         if door_length.value == '':
             door_l = 0
         else:
             door_l = float(door_length.value)
-
         if window_width.value == '':
             window_w = 0
         else:
             window_w = float(window_width.value)
-
         if window_length.value == '':
             window_l = 0
         else:
             window_l = float(window_length.value)
-
         if roll_price.value == '':
             roll_p = 0
         else:
             roll_p = float(roll_price.value)
-
         # Расчет площади стен комнаты.
         area_room = (room_w + room_l) * 2 * room_h
         # Расчет площади двери.
@@ -79,16 +77,13 @@ def main(page: Page):
     def back_button(e):
         page.go("/")
 
-    # Название окна приложения
-    page.title = "Wallpaper Calculator"
-
     # Выбор режима по умолчанию, светлый или тёмный.
     page.theme_mode = "light"
 
     # ДОБАВЛЯЕМ ЭФФЕКТ ИНДИКАТОРА ПРОГРЕССА ПРИ СМЕНЕ СВЕТА ИЛИ ТЕМНОТЫ
     page.splash = ProgressBar(visible=False)
 
-    def changetheme(e):
+    def changeTheme(e):
         page.splash.visible = True
         page.theme_mode = "light" if page.theme_mode == "dark" else "dark"
         page.update()
@@ -96,19 +91,19 @@ def main(page: Page):
         # ЭФФЕКТ ЗАДЕРЖКИ АНИМАЦИИ
         time.sleep(0.5)
 
-        # ИЗМЕНИТЕ ЗНАЧОК В ТЕМНОМ ИЛИ СВЕТЛОМ РЕЖИМЕ
+        # ИЗМЕНЕНИЕ ЗНАЧКА В ТЕМНОМ ИЛИ СВЕТЛОМ РЕЖИМЕ
         toggleDarkLight.selected = not toggleDarkLight.selected
 
-        # И СНОВА ОТКЛЮЧИТЕ ИНДИКАТОР ВЫПОЛНЕНИЯ ПРИ СМЕНЕ ТЕМНОГО РЕЖИМА
+        # ОТКЛЮЧЕНИЕ ИНДИКАТОРА ВЫПОЛНЕНИЯ ПРИ СМЕНЕ ТЕМНОГО РЕЖИМА
         page.splash.visible = False
 
         # ОБНОВЛЕНИЕ СТРАНИЦЫ ДЛЯ ИЗМЕНЕНИЯ СОСТОЯНИЯ
         page.update()
 
-    # СОЗДАТЬ ПЕРЕКЛЮЧАЮЩУЮ КНОПКУ ТЕМНЫЙ РЕЖИМ СВЕТЛЫЙ
+    # СОЗДАНИЕ ПЕРЕКЛЮЧАЮЩЕЙ КНОПКИ НА ТЁМНЫЙ И СВЕТЛЫЙ РЕЖИМ
 
     toggleDarkLight = IconButton(
-        on_click=changetheme,
+        on_click=changeTheme,
         icon="dark_mode",
         selected_icon="light_mode",
         style=ButtonStyle(
@@ -154,16 +149,16 @@ def main(page: Page):
         top_view = page.views[-1]
         page.go(top_view.route)
 
-    room_width = NumberField(label="Ширина комнаты (м)*", autofocus=True, input_type="float")
-    room_length = NumberField(label="Длина комнаты (м)*", autofocus=True, input_type="float")
-    room_height = NumberField(label="Высота комнаты (м)*", autofocus=True, input_type="float")
-    door_width = NumberField(label="Ширина двери (м)", autofocus=True, input_type="float")
-    door_length = NumberField(label="Длина двери (м)", autofocus=True, input_type="float")
-    window_width = NumberField(label="Ширина окна (м)", autofocus=True, input_type="float")
-    window_length = NumberField(label="Длина окна (м)", autofocus=True, input_type="float")
-    roll_width = NumberField(label="Ширина рулона (см)*", autofocus=True, input_type="float")
-    roll_length = NumberField(label="Длина рулона (м)*", autofocus=True, input_type="float")
-    roll_price = NumberField(label="Цена рулона (руб)", autofocus=True, input_type="float")
+    room_width = TextField(label="Ширина комнаты (м)*", autofocus=True)
+    room_length = TextField(label="Длина комнаты (м)*", autofocus=True)
+    room_height = TextField(label="Высота комнаты (м)*", autofocus=True)
+    door_width = TextField(label="Ширина двери (м)", autofocus=True)
+    door_length = TextField(label="Длина двери (м)", autofocus=True)
+    window_width = TextField(label="Ширина окна (м)", autofocus=True)
+    window_length = TextField(label="Длина окна (м)", autofocus=True)
+    roll_width = TextField(label="Ширина рулона (см)*", autofocus=True)
+    roll_length = TextField(label="Длина рулона (м)*", autofocus=True)
+    roll_price = TextField(label="Цена рулона (руб)", autofocus=True)
     result_button = ElevatedButton(text="Показать результат", on_click=result_button_clicked)
     b_button = ElevatedButton(text="Вернуться в начало", on_click=back_button)
     text_output1 = Text(size=28, selectable=True)
